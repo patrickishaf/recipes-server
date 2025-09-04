@@ -1,7 +1,9 @@
 import express from 'express';
+import cors from 'cors';
 import * as controller from './controller';
 
 const app = express()
+app.use(cors({ origin: true }));
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }));
 
