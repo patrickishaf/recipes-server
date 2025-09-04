@@ -14,7 +14,7 @@ export const createRecipe = async (req: Request, res: Response) => {
       'cost',
     ]);
     if (missingFields.length > 0) {
-      res.status(400).json({
+      res.status(200).json({
         'message': 'Recipe creation failed!',
         'required': missingFields.join(', '),
       });
