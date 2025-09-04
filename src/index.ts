@@ -1,4 +1,5 @@
 import app from './app';
+import { keepServerAlive, stopKeepingServerAlive } from './keepalive';
 
 const server = app.listen(3000, () => {
   console.log('app listening on port 3000')
@@ -11,9 +12,13 @@ process.on('unhandledRejection', (err) => {
 }).on('SIGTERM', () => {
   server.closeAllConnections();
   server.close();
+  stopKeepingServerAlive();
   process.exit(0);
 }).on('SIGINT', () => {
   server.closeAllConnections();
   server.close();
+  stopKeepingServerAlive();
   process.exit(0);
 });
+
+keepServerAlive();
