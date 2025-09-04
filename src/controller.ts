@@ -16,7 +16,7 @@ export const createRecipe = async (req: Request, res: Response) => {
     if (missingFields.length > 0) {
       res.status(400).json({
         'message': 'Recipe creation failed!',
-        'required': missingFields,
+        'required': missingFields.join(', '),
       });
       return;
     }
@@ -34,14 +34,62 @@ export const createRecipe = async (req: Request, res: Response) => {
       recipe: newRecipe,
     })
   } catch (err) {
-    res.status(500).json()
+    res.status(200).json({ message: 'something went wrong on the server' });
   }
 }
 
-export const getRecipes = (req: Request, res: Response) => {}
+export const getRecipes = async (req: Request, res: Response) => {
+  try {
+    const recipes = await db.select('*').from('recipes');
+    res.status(200).json({ recipes });
+  } catch (err) {
+    res.status(200).json({ message: 'something went wrong' });
+  }
+}
 
-export const getRecipe = (req: Request, res: Response) => {}
+export const getRecipe = async (req: Request, res: Response) => {
+  try {
+    const recipe = await db.select('*').from('recipes').where({ id: req.params.id });
+    res.status(200).json({
+      message: 'Recipe details by id',
+      recipe: recipe,
+    })
+  } catch (err) {
+    res.status(200).json({ message: 'something went wrong' });
+  }
+}
 
-export const updateRecipe = (req: Request, res: Response) => {}
+export const updateRecipe = async (req: Request, res: Response) => {
+  try {
+    const existing = await db.select('id').from('recipes').where('id', req.params.id);
+    if (!existing) {
+      res.status(200).json({
+        message: 'Invalid recipe id'
+      });
+      return;
+    }
+    const [recipe] = await db('recipes').update(req.body).where('id', req.params.id).returning('*');
+    res.status(200).json({
+      message: 'Recipe successfully updated!',
+      recipe,
+    });
+  } catch (err) {
+    res.status(200).json({ message: 'something went wrong' });
+  }
+}
 
-export const deleteRecipe = (re: Request, res: Response) => {}
+export const deleteRecipe = async (req: Request, res: Response) => {
+  try {
+    const existing = await db.select('id').from('recipes').where('id', req.params.id);
+    if (!existing) {
+      res.status(200).json({
+        message: 'Invalid recipe id'
+      });
+      return;
+    }
+    await db.delete().from('recipes').where('id', req.params.id).returning('*');
+    res.status(200).json({ message: 'Recipe deleted successfully' });
+  } catch (err) {
+    res.status(200).json({ message: 'something went wrong' });
+  }
+}
