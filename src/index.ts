@@ -10,15 +10,9 @@ process.on('unhandledRejection', (err) => {
 }).on('uncaughtException', (err) => {
   console.error(`uncaught exception: ${err}`);
 }).on('SIGTERM', () => {
-  server.closeAllConnections();
-  server.close();
-  stopKeepingServerAlive();
-  process.exit(0);
+  console.log('refusing to shut down server');
 }).on('SIGINT', () => {
-  server.closeAllConnections();
-  server.close();
-  stopKeepingServerAlive();
-  process.exit(0);
+  console.log('refusing to shut down server');
 });
 
 keepServerAlive();
