@@ -31,7 +31,7 @@ export const createRecipe = async (req: Request, res: Response) => {
     const newRecipe = await db.select('*').from('recipes').where({ id }).first();
     res.status(200).json({
       message: 'Recipe successfully created!',
-      recipe: newRecipe,
+      recipe: [newRecipe],
     })
   } catch (err) {
     res.status(200).json({ message: 'something went wrong on the server' });
