@@ -5,7 +5,7 @@ const job = CronJob.from({
   cronTime: '*/10 * * * *',
   onTick: async () => {
     try {
-      const { data: recipes } = await axios.get(`localhost:${process.env.PORT ?? 3000}/recipes`);
+      const { data: recipes } = await axios.get(`127.0.0.1:${process.env.PORT ?? 3000}/recipes`);
       console.dir({ recipes }, { depth: null });
     } catch (err) {
       console.log('internal err', err);
