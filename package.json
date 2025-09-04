@@ -5,7 +5,7 @@
   "scripts": {
     "build": "npx tsc",
     "dev": "nodemon src/index.ts",
-    "db": "nodemon src/db/init.ts"
+    "db": "node build/src/db/init.js"
   },
   "keywords": [],
   "author": "",

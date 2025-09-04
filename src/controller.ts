@@ -83,7 +83,7 @@ export const deleteRecipe = async (req: Request, res: Response) => {
     const existing = await db.select('id').from('recipes').where('id', req.params.id);
     if (!existing) {
       res.status(200).json({
-        message: 'Invalid recipe id'
+        message: 'Invalid recipe id',
       });
       return;
     }

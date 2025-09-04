@@ -4,7 +4,7 @@ import { db } from './db';
 
 export async function initializeDatabase() {
   try {
-    const schemaPath = path.join(__dirname, '..', '..', 'schema.sql');
+    const schemaPath = path.join(process.cwd(), 'schema.sql');
     let schemaSQL = fs.readFileSync(schemaPath, 'utf8');
     
     schemaSQL = schemaSQL
