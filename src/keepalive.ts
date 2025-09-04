@@ -1,9 +1,15 @@
 import { CronJob } from "cron";
+import axios from 'axios';
 
 const job = CronJob.from({
   cronTime: '*/10 * * * *',
-  onTick: () => {
-    console.log('keeping server alive');
+  onTick: async () => {
+    try {
+      const { data: recipes } = await axios.get(`localhost:${process.env.PORT ?? 3000}/recipes`);
+      console.dir({ recipes }, { depth: null });
+    } catch (err) {
+      console.log('internal err', err);
+    }
   },
   start: false,
 })

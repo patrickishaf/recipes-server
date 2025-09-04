@@ -1,8 +1,9 @@
 import app from './app';
+import { keepServerAlive, stopKeepingServerAlive } from './keepalive';
 
 const port = process.env.PORT ?? 3000;
 
-app.listen(port, () => {
+const server = app.listen(port, () => {
   console.log('app listening on port', port);
 });
 
@@ -11,7 +12,15 @@ process.on('unhandledRejection', (err) => {
 }).on('uncaughtException', (err) => {
   console.error(`uncaught exception: ${err}`);
 }).on('SIGTERM', () => {
-  console.log('handling SIGTERM. refusing to shut down server');
+  server.closeAllConnections();
+  server.close();
+  stopKeepingServerAlive();
+  process.exit(0);
 }).on('SIGINT', () => {
-  console.log('handling SIGINT. refusing to shut down server');
+  server.closeAllConnections();
+  server.close();
+  stopKeepingServerAlive();
+  process.exit(0);
 });
+
+keepServerAlive();
