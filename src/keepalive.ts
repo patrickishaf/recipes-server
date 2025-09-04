@@ -16,6 +16,7 @@ const job = CronJob.from({
 
 export const keepServerAlive = () => {
   job.start();
+  console.log('job started');
 }
 
 export const stopKeepingServerAlive = () => {
